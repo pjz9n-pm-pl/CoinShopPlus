@@ -4,5 +4,11 @@ branches:
   - master
 projects:
   CoinShopPlus:
-    path: ""
+    libs:
+      - src: dktapps-pm-pl/pmforms/pmforms
+        version: 1.0.0
+      - src: pjz9n-pm-pl/pmforms-addon/pmforms-addon
+        version: 1.0.0
+      - src: PJZ9n/MoneyConnector/MoneyConnector
+        version: 2.2.0
 ...
