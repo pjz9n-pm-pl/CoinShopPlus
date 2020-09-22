@@ -21,29 +21,26 @@
 
 declare(strict_types=1);
 
-namespace pjz9n\coinshopplus;
+namespace pjz9n\coinshopplus\language;
 
-use CortexPE\Commando\exception\HookAlreadyRegistered;
-use CortexPE\Commando\PacketHooker;
-use pjz9n\coinshopplus\language\Language;
-use pocketmine\plugin\PluginBase;
+use pocketmine\lang\BaseLang;
+use pocketmine\Server;
 
-class Main extends PluginBase
+class Language
 {
-    /**
-     * @throws HookAlreadyRegistered
-     */
-    public function onEnable(): void
+    /** @var BaseLang */
+    private static $lang;
+
+    public static function init(string $languageName, string $localePath, string $fallback): void
     {
-        if (!PacketHooker::isRegistered()) {
-            PacketHooker::register($this);
+        if ($languageName === "default") {
+            $languageName = Server::getInstance()->getLanguage()->getLang();
         }
-        Language::init(
-            (string)$this->getConfig()->get("language", "default"),
-            $this->getFile() . "resources/locale/",
-            "jpn"
-        );
-        $language = Language::get();
-        $this->getLogger()->info($language->translateString("language.selected", [$language->getName()]));
+        self::$lang = new BaseLang($languageName, $localePath, $fallback);
+    }
+
+    public static function get(): BaseLang
+    {
+        return self::$lang;
     }
 }
