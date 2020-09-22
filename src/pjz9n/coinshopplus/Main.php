@@ -26,7 +26,9 @@ namespace pjz9n\coinshopplus;
 use CortexPE\Commando\exception\HookAlreadyRegistered;
 use CortexPE\Commando\PacketHooker;
 use pjz9n\coinshopplus\language\Language;
+use PJZ9n\MoneyConnector\MoneyConnectorUtils;
 use pocketmine\plugin\PluginBase;
+use RuntimeException;
 
 class Main extends PluginBase
 {
@@ -45,5 +47,11 @@ class Main extends PluginBase
         );
         $language = Language::get();
         $this->getLogger()->info($language->translateString("language.selected", [$language->getName()]));
+        if (!MoneyConnectorUtils::isExistsSupportedAPI()) {
+            throw new RuntimeException($language->translateString("money.notfound"));
+        }
+        $this->getLogger()->info(
+            $language->translateString("money.selected", [MoneyConnectorUtils::getConnectorByDetect()->getName()])
+        );
     }
 }
