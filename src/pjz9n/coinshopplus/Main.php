@@ -26,12 +26,18 @@ namespace pjz9n\coinshopplus;
 use CortexPE\Commando\exception\HookAlreadyRegistered;
 use CortexPE\Commando\PacketHooker;
 use pjz9n\coinshopplus\language\Language;
+use pjz9n\coinshopplus\shop\Shop;
+use pjz9n\coinshopplus\shop\ShopHolder;
 use PJZ9n\MoneyConnector\MoneyConnectorUtils;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
 use RuntimeException;
 
 class Main extends PluginBase
 {
+    /** @var Config */
+    private $shopConfig;
+
     /**
      * @throws HookAlreadyRegistered
      */
@@ -53,5 +59,18 @@ class Main extends PluginBase
         $this->getLogger()->info(
             $language->translateString("money.selected", [MoneyConnectorUtils::getConnectorByDetect()->getName()])
         );
+        $this->shopConfig = new Config($this->getDataFolder() . "shop.json");
+        if (($serializedBuyShop = $this->shopConfig->get("buyShop")) === false) {
+            $buyShop = new Shop();
+        } else {
+            $buyShop = Shop::configDeserialize($serializedBuyShop);
+        }
+        ShopHolder::init($buyShop);
+    }
+
+    public function onDisable(): void
+    {
+        $this->shopConfig->set("buyShop", ShopHolder::getBuyShop()->configSerialize());
+        $this->shopConfig->save();
     }
 }
