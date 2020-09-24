@@ -27,5 +27,5 @@ interface ConfigSerializable
 {
     public function configSerialize(): array;
 
-    public function configDeserialize(array $data);
+    public static function configDeserialize(array $data);
 }
