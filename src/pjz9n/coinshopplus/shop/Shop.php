@@ -69,9 +69,9 @@ class Shop implements ConfigSerializable
     /**
      * @return ShopItem[]
      */
-    public function getAllShopItem(): array
+    public function getAllShopItem(int $folder): array
     {
-        return $this->shopItems;
+        return $this->shopItems[$folder];
     }
 
     public function removeShopItem(int $folder, ShopItem $shopItem): void
