@@ -27,80 +27,56 @@ use pjz9n\coinshopplus\utils\ConfigSerializable;
 
 class Shop implements ConfigSerializable
 {
-    /** @var string[] */
+    /** @var Folder[] */
     private $folders = [];
 
-    /** @var ShopItem[][] */
-    private $shopItems = [];
-
-    public function addFolder(string $folder)
+    public function addFolder(Folder $folder)
     {
         $this->folders[] = $folder;
+        $this->recalculateFoldersKey();
     }
 
     /**
-     * @return string[]
+     * @return Folder[]
      */
     public function getAllFolders(): array
     {
         return $this->folders;
     }
 
-    public function getFolder(int $index): ?string
+    public function getFolder(int $index): ?Folder
     {
         return $this->folders[$index] ?? null;
     }
 
-    public function removeFolder(int $index): void
+    public function removeFolder(Folder $folder): void
     {
-        unset($this->folders[$index]);
+        if (($search = array_search($folder, $this->folders, true)) === false) return;
+        unset($this->folders[$search]);
+        $this->recalculateFoldersKey();
     }
 
-    public function addShopItem(int $folder, ShopItem $shopItem): void
+    private function recalculateFoldersKey(): void
     {
-        $this->shopItems[$folder][] = $shopItem;
-    }
-
-    public function getShopItem(int $folder, int $index): ?ShopItem
-    {
-        return $this->shopItems[$folder][$index] ?? null;
-    }
-
-    /**
-     * @return ShopItem[]
-     */
-    public function getAllShopItem(int $folder): array
-    {
-        return $this->shopItems[$folder];
-    }
-
-    public function removeShopItem(int $folder, ShopItem $shopItem): void
-    {
-        unset($this->shopItems[$folder][array_search($shopItem, $this->shopItems, true)]);
+        $this->folders = array_values($this->folders);
     }
 
     public function configSerialize(): array
     {
-        $serializedShopItems = [];
-        foreach ($this->shopItems as $folder => $shopItems) {
-            foreach ($shopItems as $index => $shopItem) {
-                $serializedShopItems[$folder][$index] = $shopItem->configSerialize();
-            }
+        $serializedFolders = [];
+        foreach ($this->folders as $folder) {
+            $serializedFolders[] = $folder->configSerialize();
         }
         return [
-            "folders" => $this->folders,
-            "shopItems" => $serializedShopItems,
+            "folders" => $serializedFolders,
         ];
     }
 
     public static function configDeserialize(array $data): self
     {
         $self = new self();
-        $self->folders = $data["folders"];
-        foreach ($data["shopItems"] as $folder => $serializedShopItems) {
-            foreach ($serializedShopItems as $index => $serializedShopItem) {
-                $self->shopItems[$folder][$index] = ShopItem::configDeserialize($serializedShopItem);
-            }
+        foreach ($data["folders"] as $serializedFolder) {
+            $self->addFolder(Folder::configDeserialize($serializedFolder));
         }
         return $self;
     }
