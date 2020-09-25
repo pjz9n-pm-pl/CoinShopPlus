@@ -24,6 +24,7 @@ declare(strict_types=1);
 namespace pjz9n\coinshopplus\shop;
 
 use pjz9n\coinshopplus\utils\ConfigSerializable;
+use pocketmine\item\Item;
 
 class ShopItem implements ConfigSerializable
 {
@@ -129,6 +130,11 @@ class ShopItem implements ConfigSerializable
     public function setCount(int $count): void
     {
         $this->count = $count;
+    }
+
+    public function toItem(): Item
+    {
+        return Item::get($this->getItemId(), $this->getItemDamage(), $this->getCount());
     }
 
     public function configSerialize(): array
