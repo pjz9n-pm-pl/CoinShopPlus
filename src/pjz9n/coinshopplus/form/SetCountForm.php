@@ -31,6 +31,7 @@ use pjz9n\coinshopplus\shop\ShopItem;
 use pjz9n\coinshopplus\shop\ShopType;
 use pjz9n\coinshopplus\utils\InventoryUtils;
 use pjz9n\coinshopplus\utils\ShopTypeUtils;
+use pjz9n\coinshopplus\utils\Utils;
 use PJZ9n\MoneyConnector\MoneyConnectorUtils;
 use pjz9n\pmformsaddon\AbstractCustomForm;
 use pocketmine\Player;
@@ -81,7 +82,7 @@ class SetCountForm extends AbstractCustomForm
     public function onSubmit(Player $player, CustomFormResponse $response): void
     {
         $setCount = $response->getString("set-count");
-        if (preg_match("/^[0-9]+$/", $setCount) !== 1) {
+        if (!Utils::isOnlyNumber($setCount)) {
             $player->sendForm(new ErrorForm(Language::get()->translateString("error.validate.numeric"), $this));
             return;
         }
