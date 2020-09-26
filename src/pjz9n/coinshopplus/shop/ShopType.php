@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace pjz9n\coinshopplus\shop;
 
-interface Type
+interface ShopType
 {
     /** @var int */
     const BUY = 0;
