@@ -25,10 +25,12 @@ namespace pjz9n\coinshopplus;
 
 use CortexPE\Commando\exception\HookAlreadyRegistered;
 use CortexPE\Commando\PacketHooker;
+use pjz9n\coinshopplus\command\ShopCommand;
 use pjz9n\coinshopplus\language\Language;
 use pjz9n\coinshopplus\shop\Shop;
 use pjz9n\coinshopplus\shop\ShopHolder;
 use PJZ9n\MoneyConnector\MoneyConnectorUtils;
+use pocketmine\permission\Permission;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
 use RuntimeException;
@@ -66,6 +68,12 @@ class Main extends PluginBase
             $shop = Shop::configDeserialize($serializedShop);
         }
         ShopHolder::init($shop);
+        $this->getServer()->getPluginManager()->addPermission(new Permission(
+            "coinshopplus.command.shop",
+            "permission for /shop command",
+            Permission::DEFAULT_TRUE,
+        ));
+        $this->getServer()->getCommandMap()->register($this->getName(), new ShopCommand($this));
     }
 
     public function onDisable(): void
