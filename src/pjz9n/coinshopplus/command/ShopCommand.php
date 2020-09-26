@@ -24,7 +24,6 @@ declare(strict_types=1);
 namespace pjz9n\coinshopplus\command;
 
 use CortexPE\Commando\BaseCommand;
-use CortexPE\Commando\exception\ArgumentOrderException;
 use pjz9n\coinshopplus\form\FolderListForm;
 use pjz9n\coinshopplus\language\Language;
 use pocketmine\command\CommandSender;
@@ -45,9 +44,6 @@ class ShopCommand extends BaseCommand
         $this->setPermission("coinshopplus.command.shop");
     }
 
-    /**
-     * @throws ArgumentOrderException
-     */
     protected function prepare(): void
     {
         //
