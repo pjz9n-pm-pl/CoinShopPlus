@@ -26,15 +26,15 @@ namespace pjz9n\coinshopplus\shop;
 class ShopHolder
 {
     /** @var Shop */
-    private static $buyShop = null;
+    private static $shop = null;
 
-    public static function init(Shop $buyShop): void
+    public static function init(Shop $shop): void
     {
-        self::$buyShop = $buyShop;
+        self::$shop = $shop;
     }
 
-    public static function getBuyShop(): Shop
+    public static function getShop(): Shop
     {
-        return self::$buyShop;
+        return self::$shop;
     }
 }

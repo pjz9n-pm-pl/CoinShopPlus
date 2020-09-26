@@ -60,17 +60,17 @@ class Main extends PluginBase
             $language->translateString("money.selected", [MoneyConnectorUtils::getConnectorByDetect()->getName()])
         );
         $this->shopConfig = new Config($this->getDataFolder() . "shop.json");
-        if (($serializedBuyShop = $this->shopConfig->get("buyShop")) === false) {
-            $buyShop = new Shop();
+        if (($serializedShop = $this->shopConfig->get("shop")) === false) {
+            $shop = new Shop();
         } else {
-            $buyShop = Shop::configDeserialize($serializedBuyShop);
+            $shop = Shop::configDeserialize($serializedShop);
         }
-        ShopHolder::init($buyShop);
+        ShopHolder::init($shop);
     }
 
     public function onDisable(): void
     {
-        $this->shopConfig->set("buyShop", ShopHolder::getBuyShop()->configSerialize());
+        $this->shopConfig->set("shop", ShopHolder::getShop()->configSerialize());
         $this->shopConfig->save();
     }
 }
