@@ -43,13 +43,20 @@ class ShopItem implements ConfigSerializable
     /** @var int */
     private $price;
 
-    public function __construct(string $displayName, int $itemId, int $itemDamage, int $count, int $price)
+    /** @var int[] */
+    private $acceptTypes;
+
+    /**
+     * @param int[] $acceptTypes
+     */
+    public function __construct(string $displayName, int $itemId, int $itemDamage, int $count, int $price, array $acceptTypes)
     {
         $this->displayName = $displayName;
         $this->itemId = $itemId;
         $this->itemDamage = $itemDamage;
         $this->count = $count;
         $this->price = $price;
+        $this->acceptTypes = $acceptTypes;
     }
 
     /**
@@ -132,6 +139,27 @@ class ShopItem implements ConfigSerializable
         $this->count = $count;
     }
 
+    /**
+     * @return int[]
+     */
+    public function getAcceptTypes(): array
+    {
+        return $this->acceptTypes;
+    }
+
+    /**
+     * @param int[] $acceptTypes
+     */
+    public function setAcceptTypes(array $acceptTypes): void
+    {
+        $this->acceptTypes = $acceptTypes;
+    }
+
+    public function isTypeAccept(int $type): bool
+    {
+        return array_search($type, $this->acceptTypes, true) !== false;
+    }
+
     public function toItem(): Item
     {
         return Item::get($this->getItemId(), $this->getItemDamage(), $this->getCount());
@@ -145,6 +173,7 @@ class ShopItem implements ConfigSerializable
             "itemDamage" => $this->itemDamage,
             "count" => $this->count,
             "price" => $this->price,
+            "acceptTypes" => $this->acceptTypes,
         ];
     }
 
@@ -155,7 +184,8 @@ class ShopItem implements ConfigSerializable
             $data["itemId"],
             $data["itemDamage"],
             $data["count"],
-            $data["price"]
+            $data["price"],
+            $data["acceptTypes"]
         );
     }
 }
