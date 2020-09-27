@@ -23,32 +23,28 @@ declare(strict_types=1);
 
 namespace pjz9n\coinshopplus\command;
 
-use CortexPE\Commando\BaseCommand;
-use pjz9n\coinshopplus\form\FolderListForm;
+use CortexPE\Commando\BaseSubCommand;
+use pjz9n\coinshopplus\form\FolderEditForm;
 use pjz9n\coinshopplus\language\Language;
 use pocketmine\command\CommandSender;
 use pocketmine\Player;
-use pocketmine\plugin\Plugin;
 use pocketmine\utils\TextFormat;
 
-class ShopCommand extends BaseCommand
+class ShopFolderCommand extends BaseSubCommand
 {
-    public function __construct(Plugin $plugin)
+    public function __construct()
     {
         parent::__construct(
-            $plugin,
-            "shop",
-            Language::get()->translateString("command.shop.description"),
-            ["bshop", "sshop"]
+            "folder",
+            Language::get()->translateString("command.shop.folder.description"),
+            ["f", "dir", "directory"]
         );
-        $this->setPermission("coinshopplus.command.shop");
+        $this->setPermission("coinshopplus.command.shop.folder");
     }
 
     protected function prepare(): void
     {
-        $this->registerSubCommand(new ShopAddCommand());
-        $this->registerSubCommand(new ShopEditCommand());
-        $this->registerSubCommand(new ShopFolderCommand());
+        //
     }
 
     public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
@@ -57,6 +53,6 @@ class ShopCommand extends BaseCommand
             $sender->sendMessage(TextFormat::RED . Language::get()->translateString("command.onlyplayer"));
             return;
         }
-        $sender->sendForm(new FolderListForm($sender));
+        $sender->sendForm(new FolderEditForm());
     }
 }
