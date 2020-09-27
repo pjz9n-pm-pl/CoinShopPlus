@@ -43,8 +43,7 @@ class ShopTypeUtils
     /**
      * @param int[] $types
      *
-     * @return TranslationContainer|null[]
-     * @phpstan-return (TranslationContainer|null)[]
+     * @return (TranslationContainer|null)[]
      */
     public static function getShopTypeTextMulti(array $types): array
     {
@@ -65,8 +64,7 @@ class ShopTypeUtils
     /**
      * @param int[] $types
      *
-     * @return string|null[]
-     * @phpstan-return (string|null)[]
+     * @return (string|null)[]
      */
     public static function getShopTypeStringMulti(array $types): array
     {
