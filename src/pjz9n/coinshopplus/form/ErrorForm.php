@@ -30,22 +30,27 @@ use pocketmine\Player;
 
 class ErrorForm extends AbstractModalForm
 {
-    /** @var Form */
+    /** @var Form|null */
     private $back;
 
-    public function __construct(string $message, Form $back)
+    public function __construct(string $message, ?Form $back = null)
     {
         $this->back = $back;
         parent::__construct(
             Language::get()->translateString("error"),
             $message,
-            Language::get()->translateString("gui.back"),
+            $back === null
+                ? Language::get()->translateString("gui.close")
+                : Language::get()->translateString("gui.back"),
             Language::get()->translateString("gui.close")
         );
     }
 
     public function onSubmit(Player $player, bool $choice): void
     {
+        if ($this->back === null) {
+            return;
+        }
         if ($choice) {
             $player->sendForm($this->back);
         }
