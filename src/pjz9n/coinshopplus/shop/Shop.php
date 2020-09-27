@@ -49,6 +49,12 @@ class Shop implements ConfigSerializable
         return $this->folders[$index] ?? null;
     }
 
+    public function getFolderIndex(Folder $folder): ?int
+    {
+        if (($index = array_search($folder, $this->folders, true)) === false) return null;
+        return $index;
+    }
+
     public function removeFolder(Folder $folder): void
     {
         if (($search = array_search($folder, $this->folders, true)) === false) return;
