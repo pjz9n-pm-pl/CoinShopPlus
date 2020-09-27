@@ -23,11 +23,24 @@ declare(strict_types=1);
 
 namespace pjz9n\coinshopplus\utils;
 
+use pocketmine\item\ItemFactory;
+use Throwable;
+
 class Utils
 {
     public static function isOnlyNumber(string $str): bool
     {
         return preg_match("/^[0-9]+$/", $str) === 1;
+    }
+
+    public static function isValidItem(int $id, int $damage): bool
+    {
+        try {
+            ItemFactory::get($id, $damage);
+        } catch (Throwable $throwable) {
+            return false;
+        }
+        return true;
     }
 
     private function __construct()
