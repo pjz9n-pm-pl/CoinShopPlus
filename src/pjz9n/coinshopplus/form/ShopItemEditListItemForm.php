@@ -69,13 +69,13 @@ class ShopItemEditListItemForm extends AbstractMenuForm
     {
         if ($selectedOption === 0) {
             //戻る
-            $player->sendForm(new FolderListForm($player));
+            $player->sendForm(new ShopItemEditListFolderForm());
             return;
         }
         $shopItem = $this->folder->getShopItem($selectedOption - 1);
         if (!($shopItem instanceof ShopItem)) {
             //戻る
-            $player->sendForm(new FolderListForm($player));
+            $player->sendForm(new ShopItemEditListFolderForm());
             return;
         }
         //アイテムが選択された
