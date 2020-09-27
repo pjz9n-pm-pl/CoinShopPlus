@@ -83,12 +83,16 @@ class SetCountForm extends AbstractCustomForm
     {
         $setCount = $response->getString("set-count");
         if (!Utils::isOnlyNumber($setCount)) {
-            $player->sendForm(new ErrorForm(Language::get()->translateString("error.validate.numeric"), $this));
+            $player->sendForm(new ErrorForm(Language::get()->translateString("error.validate.numeric", [
+                Language::get()->translateString("shop.setcount"),
+            ]), $this));
             return;
         }
         $setCount = (int)$setCount;
         if ($setCount <= 0) {
-            $player->sendForm(new ErrorForm(Language::get()->translateString("error.validate.toosmall"), $this));
+            $player->sendForm(new ErrorForm(Language::get()->translateString("error.validate.toosmall", [
+                Language::get()->translateString("shop.setcount"),
+            ]), $this));
             return;
         }
         //最大セット数超過チェック(UX的な意味合いが強い)
