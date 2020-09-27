@@ -38,7 +38,7 @@ class ShopCommand extends BaseCommand
         parent::__construct(
             $plugin,
             "shop",
-            Language::get()->translateString("shop"),
+            Language::get()->translateString("command.shop.description"),
             ["bshop", "sshop"]
         );
         $this->setPermission("coinshopplus.command.shop");
