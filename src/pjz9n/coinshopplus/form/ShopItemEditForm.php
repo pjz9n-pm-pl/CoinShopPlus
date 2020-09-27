@@ -122,7 +122,7 @@ class ShopItemEditForm extends AbstractCustomForm
             return;
         }
         $price = (int)$price;
-        $folder = ShopHolder::getShop()->getFolder($response->getInt("folder"));
+        $newFolder = ShopHolder::getShop()->getFolder($response->getInt("folder"));
         $buy = $response->getBool("buy");
         $sell = $response->getBool("sell");
         $acceptTypes = [];
@@ -137,24 +137,35 @@ class ShopItemEditForm extends AbstractCustomForm
             ]), $this));
             return;
         }
-        $folder->addShopItem(new ShopItem(
-            $displayName,
-            $itemId,
-            $itemDamage,
-            $itemCount,
-            $price,
-            $acceptTypes
-        ));
         if ($this->folder instanceof Folder && $this->shopItem instanceof ShopItem) {
-            //移動のため
-            $this->folder->removeShopItem($this->shopItem);
+            //編集
+            $this->shopItem->setDisplayName($displayName);
+            $this->shopItem->setItemId($itemId);
+            $this->shopItem->setItemDamage($itemDamage);
+            $this->shopItem->setCount($itemCount);
+            $this->shopItem->setPrice($price);
+            $this->shopItem->setAcceptTypes($acceptTypes);
+            if ($this->folder !== $newFolder) {
+                //移動
+                $this->folder->removeShopItem($this->shopItem);
+                $newFolder->addShopItem($this->shopItem);
+            }
             $player->sendForm(new SuccessForm(Language::get()->translateString("shop.item.edit.success", [
                 Language::get()->translateString("change"),
-            ]), $this));
+            ])));
         } else {
+            //追加
+            $newFolder->addShopItem(new ShopItem(
+                $displayName,
+                $itemId,
+                $itemDamage,
+                $itemCount,
+                $price,
+                $acceptTypes
+            ));
             $player->sendForm(new SuccessForm(Language::get()->translateString("shop.item.edit.success", [
                 Language::get()->translateString("add"),
-            ]), $this));
+            ])));
         }
     }
 }

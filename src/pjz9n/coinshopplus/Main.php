@@ -78,6 +78,11 @@ class Main extends PluginBase
             "permission for /shop add command",
             Permission::DEFAULT_OP,
         ));
+        $this->getServer()->getPluginManager()->addPermission(new Permission(
+            "coinshopplus.command.shop.edit",
+            "permission for /shop edit command",
+            Permission::DEFAULT_OP,
+        ));
         $this->getServer()->getCommandMap()->register($this->getName(), new ShopCommand($this));
     }
 
